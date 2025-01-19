@@ -29,4 +29,5 @@ def cadastrar(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     if not cadastro(form_data.username, form_data.password):
         return "Usuário já cadastrado anteriormente."
-    return "Usuário cadastrado"
+    else:
+        return "Usuário cadastrado"
