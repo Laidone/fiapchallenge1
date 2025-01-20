@@ -51,8 +51,8 @@ async def get_exportacao(ano : int = Query(None,enum= [year for year in reversed
 async def post_exportacao(ano : int = Query(None,enum= [year for year in reversed(range(1970, 2024))]), subopt: Optional[str] = Query(None, enum=["Vinhos de mesa", "Espumantes", "Uvas frescas", "Uvas passas", "Suco de uva"])):
     return service.insert_exportacao("06",ano, subImpExp.get(subopt), subopt)
 
-@router.post("cadastrar", tags=["Authentication"])
-def cadastrar(user : str, password : str):
+@router.get("/cadastrar", tags=["Authentication"])
+async def cadastrar(user : str, password : str):
     """
     Endpoint para cadastro de usuário.
     """
