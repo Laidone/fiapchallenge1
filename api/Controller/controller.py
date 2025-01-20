@@ -52,10 +52,10 @@ async def post_exportacao(ano : int = Query(None,enum= [year for year in reverse
     return service.insert_exportacao("06",ano, subImpExp.get(subopt), subopt)
 
 @router.post("cadastrar", tags=["Authentication"])
-def cadastrar(form_data: OAuth2PasswordRequestForm = Depends()):
+def cadastrar(user : str, password : str):
     """
     Endpoint para cadastro de usuário.
     """
-    if not cadastro(form_data.username, form_data.password):
+    if not cadastro(user, password):
         return "Usuário já cadastrado anteriormente."
     return "Usuário cadastrado"
