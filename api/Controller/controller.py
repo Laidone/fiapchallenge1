@@ -51,7 +51,7 @@ async def get_exportacao(ano : int = Query(None,enum= [year for year in reversed
 async def post_exportacao(ano : int = Query(None,enum= [year for year in reversed(range(1970, 2024))]), subopt: Optional[str] = Query(None, enum=["Vinhos de mesa", "Espumantes", "Uvas frescas", "Uvas passas", "Suco de uva"])):
     return service.insert_exportacao("06",ano, subImpExp.get(subopt), subopt)
 
-@router.post("/auth/cadastrar", tags=["Authentication"])
+@router.post("cadastrar", tags=["Authentication"])
 def cadastrar(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     Endpoint para cadastro de usuário.
