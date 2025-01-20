@@ -21,12 +21,3 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
         data={"sub": user.iloc[0]["User"]}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
-
-@router.post("/auth/cadastrar", tags=["Authentication"])
-def cadastrar(form_data: OAuth2PasswordRequestForm = Depends()):
-    """
-    Endpoint para cadastro de usuário.
-    """
-    if not cadastro(form_data.username, form_data.password):
-        return "Usuário já cadastrado anteriormente."
-    return "Usuário cadastrado"

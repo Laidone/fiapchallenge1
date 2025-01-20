@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends, Query
 from api.Service import scraper, service
 from api.utils.auth_util import get_current_user
-from typing import Optional
+from typing import Optional 
+from fastapi.security import OAuth2PasswordRequestForm
+from api.utils.auth_util import cadastro
 
 
-router = APIRouter(
-     dependencies=[Depends(get_current_user)]  # Aplica a validação JWT em todas as rotas
-)
+router = APIRouter()
 
 subOptProces = {"Viníferas": "01", "Americanas e híbridas": "02", "Uvas de mesa": "03" , "Sem classificação": "04"}
 subImpExp = {"Vinhos de mesa": "01", "Espumantes": "02", "Uvas frescas": "03" , "Uvas passas": "04", "Suco de uva": "05"}
 
-@router.get("/Producao", tags=["Producao"])
+@router.get("/Producao", tags=["Producao"], dependencies=[Depends(get_current_user)])
 async def get_producao(ano : int = Query(None,enum= [year for year in reversed(range(1970, 2024))])):
     return scraper.get_scraper("02", ano)
 
@@ -50,3 +50,12 @@ async def get_exportacao(ano : int = Query(None,enum= [year for year in reversed
 @router.post("/ExportacaoInserir", tags=["Exportacao"])
 async def post_exportacao(ano : int = Query(None,enum= [year for year in reversed(range(1970, 2024))]), subopt: Optional[str] = Query(None, enum=["Vinhos de mesa", "Espumantes", "Uvas frescas", "Uvas passas", "Suco de uva"])):
     return service.insert_exportacao("06",ano, subImpExp.get(subopt), subopt)
+
+@router.post("/auth/cadastrar", tags=["Authentication"])
+def cadastrar(form_data: OAuth2PasswordRequestForm = Depends()):
+    """
+    Endpoint para cadastro de usuário.
+    """
+    if not cadastro(form_data.username, form_data.password):
+        return "Usuário já cadastrado anteriormente."
+    return "Usuário cadastrado"
